@@ -3,6 +3,8 @@ Acepta Login con biometricos, cambio de tema etc etc
 
 Solo debes modificar stacknavigator para tu pantalla principal, ya sea el login o cualquier otra cosa y las credenciales de supabase tuya, el encriptarlo es problema totalmente tuyo.
 
+el logo se edita literlamente logo.png por el tuyo, la paleta de colores eres libre de cambiarla, recomiendo seguir usando el style dark/light para mejor progreso, pero eso es opcional.
+
 ## 📜 Licencia
 Este proyecto está bajo la licencia **Apache 2.0**.  
 Puedes usarlo libremente, pero debes **dar créditos a Pawis7**.
