@@ -9,7 +9,7 @@ SI ALGUIEN LO PRUEBA EN IOS DIGAME SI FUNCIONA LA BIOMETRIA
 
 ## 📜 Licencia
 Este proyecto está bajo la licencia **Apache 2.0**.  
-Puedes usarlo libremente, pero debes **dar créditos a Pawis7**.
+Puedes usarlo libremente, pero debes **dar créditos a S. "Pawis" M. Arciniega**.
 
 ## 🔗 Créditos
 - 🧑‍💻 Creado por **Pawis7**
