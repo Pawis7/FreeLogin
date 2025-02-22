@@ -53,20 +53,9 @@ const HomeScreen = ({ navigation }) => {
           <Text style={styles.CrearCuentaFont}>Cambiar Tema</Text>
         </TouchableOpacity>
 
-        {/* 🔥 Botón de Logout corregido */}
         <TouchableOpacity style={styles.Boton} onPress={handleLogout}>
           <Text style={styles.CrearCuentaFont}>Cerrar Sesión</Text>
-        </TouchableOpacity>
-
-        <View style={styles.InputContainer}>
-          <TextInput style={styles.TextOnInput} placeholder="Nombre" returnKeyType="next" />
-        </View>
-
-        <View style={styles.Boton}>
-          <TouchableOpacity>
-            <Text style={styles.CrearCuentaFont}>Crear Cuenta</Text>
-          </TouchableOpacity>
-        </View>
+        </TouchableOpacity>     
       </View>
     </View>
   );

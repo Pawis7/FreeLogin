@@ -171,15 +171,21 @@ const styles = StyleSheet.create({
     color: "#666",
   },
   linkText: {
-    color: "#4285F4",
+    color: "#023e8a",
     fontSize: 17,
-    textDecorationLine: "underline",
+    
   },
   linkTextBold: {
-    color: "#4285F4",
+    color: "#023e8a",
     fontWeight: "bold",
     fontSize: 17,
-    textDecorationLine: "underline",
+    
+  },
+  forgotPass: {
+    color: "#023e8a",
+    fontSize: 12,
+    paddingTop: 9,
+    font: "montserrat",
   },
 });
 

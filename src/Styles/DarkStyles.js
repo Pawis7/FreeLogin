@@ -5,7 +5,7 @@ const { width, height } = Dimensions.get("window");
 const styles = StyleSheet.create({
   MainContainer: {
     flex: 1,
-    backgroundColor:"#282828",
+    backgroundColor: "#282828",
   },
   Titulo: {
     fontSize: 40,
@@ -19,13 +19,13 @@ const styles = StyleSheet.create({
     width: width * 0.85,
     height: 55,
     borderRadius: 10,
-    marginVertical: width * 0.02, 
+    marginVertical: width * 0.02,
     alignSelf: "center",
     borderWidth: 1,
     borderColor: "#8b8b8b",
     paddingHorizontal: 10,
     flexDirection: "row",
-    alignItems: "center", 
+    alignItems: "center",
   },
   Logo: {
     width: 140,
@@ -185,7 +185,12 @@ const styles = StyleSheet.create({
     fontSize: 17,
     textDecorationLine: "underline",
   },
-  
+  forgotPass: {
+    color: "#4B92B8",
+    fontSize: 12,
+    paddingTop: 9,
+    font: "montserrat",
+  },
 });
 
 export default styles;

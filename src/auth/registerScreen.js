@@ -20,7 +20,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "../Styles/ThemeContext";
 import { Checkbox } from "react-native-paper";
 import { signUp } from "../dataBase/SignUp";
-import { ArrowLeftIcon } from "react-native-heroicons/solid";
+
 
 
 // Constantes para obtener el ancho y alto de la pantalla
@@ -84,7 +84,7 @@ export const RegisterScreen = ({ navigation }) => {
 
     if (!validatePassword(password)) {
       setPasswordError(
-        "Debe tener MAXIMO 8 caracteres, 1 mayúscula, 1 número y 1 símbolo"
+        "Debe tener MINIMO 8 caracteres, 1 mayúscula, 1 número y 1 símbolo"
       );
       valid = false;
     } else {
@@ -159,7 +159,7 @@ export const RegisterScreen = ({ navigation }) => {
       <SafeAreaView style={{ flex: 1 }}>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={{ flex: 0 }}
+          style={{ flex: 1 }}
         >
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <ScrollView

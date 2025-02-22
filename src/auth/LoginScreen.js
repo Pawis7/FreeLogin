@@ -18,9 +18,10 @@ import React, { useRef, useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "../Styles/ThemeContext";
 import { logIn } from "../dataBase/Login";
-import * as LocalAuthentication from "expo-local-authentication"; 
+import * as LocalAuthentication from "expo-local-authentication";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import useBiometricAuth from "../Hooks/BiometricAuth";
+import { Checkbox } from "react-native-paper";
 
 const { width, height } = Dimensions.get("window");
 
@@ -45,6 +46,8 @@ export const LoginScreen = ({ navigation }) => {
       </View>
     );
   };
+
+  const [checked, setChecked] = useState(false);
 
   const shakeAnimation = useRef(new Animated.Value(0)).current;
 
@@ -90,7 +93,12 @@ export const LoginScreen = ({ navigation }) => {
           Vibration.vibrate();
           return;
         }
-        await AsyncStorage.setItem("userData", JSON.stringify({ email, password }));
+        if (checked === true) {
+          await AsyncStorage.setItem(
+            "userData",
+            JSON.stringify({ email, password })
+          );
+        }
         navigation.replace("Main");
       } catch (error) {
         alert(`Error: ${error.message}`);
@@ -123,55 +131,24 @@ export const LoginScreen = ({ navigation }) => {
     ]).start();
   };
 
+  const { checkForSavedUser, isAuthenticated } = useBiometricAuth();
+
   useEffect(() => {
     checkForSavedUser();
   }, []);
 
-  const checkForSavedUser = async () => {
-    const userData = await AsyncStorage.getItem("userData");
-    if (userData) {
-      authenticateWithBiometrics();
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigation.replace("Main");
     }
-  };
+  }, [isAuthenticated]);
 
-  const authenticateWithBiometrics = async () => {
-    try {
-      const hasHardware = await LocalAuthentication.hasHardwareAsync();
-      const isEnrolled = await LocalAuthentication.isEnrolledAsync();
-      
-  
-      if (!hasHardware) {
-        Alert.alert("Error", "Este dispositivo no tiene hardware biométrico.");
-        return;
-      }
-  
-      if (!isEnrolled) {
-        Alert.alert("Error", "No hay huellas o Face ID registrados en este dispositivo.");
-        return;
-      }
-  
-      const result = await LocalAuthentication.authenticateAsync({
-        promptMessage: "Autenticación biométrica",
-        fallbackLabel: "Usar contraseña", 
-        disableDeviceFallback: false, 
-      });
-  
-      if (result.success) {
-        navigation.replace("Main");
-      } else {
-        Alert.alert("Error", "Autenticación fallida. Usa tu contraseña.");
-      }
-    } catch (error) {
-      Alert.alert("Error", "Hubo un problema con la autenticación biométrica.");
-    }
-  };
-  
   return (
     <View style={styles.MainContainer}>
       <SafeAreaView style={{ flex: 1 }}>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={{ flex: 0 }}
+          style={{ flex: 1 }}
         >
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <ScrollView
@@ -267,22 +244,35 @@ export const LoginScreen = ({ navigation }) => {
                   ) : null}
                 </View>
               </Animated.View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
 
+                  width: "95%",
+                  paddingHorizontal: 20,
+                }}
+              >
+                <View style={{ flexDirection: "row" }}>
+                  <Checkbox
+                    status={checked ? "checked" : "unchecked"}
+                    onPress={() => setChecked(!checked)}
+                    color={checked ? "#4B92B8" : "gray"}
+                  />
+                  <Text style={styles.ToSText}>Recuérdame</Text>
+                </View>
+                
+                <TouchableOpacity onPress={() => alert("Recuperar contraseña")}>
+                  <Text
+                    style={styles.forgotPass}
+                  >
+                    ¿Olvidaste tu contraseña?
+                  </Text>
+                </TouchableOpacity>
+              </View>
               <View style={styles.Boton}>
                 <TouchableOpacity onPress={handleRegister}>
                   <Text style={styles.CrearCuentaFont}>Iniciar Sesión</Text>
-                </TouchableOpacity>
-              </View>
-              <View>
-                <TouchableOpacity
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    marginTop: width * 0.06,
-                  }}
-                  onPress={() => alert("Recuperar contraseña")}
-                >
-                  <Text style={styles.linkText}>¿Olvidaste tu contraseña?</Text>
                 </TouchableOpacity>
               </View>
               <View>
