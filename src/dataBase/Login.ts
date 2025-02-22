@@ -1,4 +1,5 @@
 import { supabase } from "./supabase";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export async function logIn(email: string, password: string) {
   try {
@@ -6,7 +7,14 @@ export async function logIn(email: string, password: string) {
       email,
       password,
     });
-
+    if (data.session){
+      const userData ={
+        email: data.user.email,
+        access_token: data.session.access_token,
+        refresh_token: data.session.refresh_token,
+      };
+      await AsyncStorage.setItem("userData", JSON.stringify(userData))
+    }
     if (error) {
       return { success: false, message: error.message };
     }

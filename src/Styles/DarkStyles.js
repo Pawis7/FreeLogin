@@ -5,7 +5,7 @@ const { width, height } = Dimensions.get("window");
 const styles = StyleSheet.create({
   MainContainer: {
     flex: 1,
-    backgroundColor: "#282828",
+    backgroundColor: "#15202b",
   },
   Titulo: {
     fontSize: 40,

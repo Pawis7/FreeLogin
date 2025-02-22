@@ -14,7 +14,7 @@ export default function StackNavigator() {
       
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}}/>
-      <Stack.Screen name="Register" component={RegisterScreen} options={{headerShown: false}}/>
+      <Stack.Screen name="Register" component={RegisterScreen} options={{headerShown: false, cardStyle: { backgroundColor: "red" }}}/>
       <Stack.Screen name="Main" component={MainScreen} />
 
     </Stack.Navigator>

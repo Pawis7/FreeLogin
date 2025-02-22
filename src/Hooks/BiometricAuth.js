@@ -2,38 +2,52 @@ import { useEffect, useState } from "react";
 import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as LocalAuthentication from "expo-local-authentication";
+import { supabase } from "../dataBase/supabase";
+
 
 const useBiometricAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const checkForSavedUser = async () => {
+  useEffect(() => {
+    authenticateWithBiometrics();
+  }, []);
+
+  
+  
+
+ const authenticateWithBiometrics = async () => {
     try {
       const userData = await AsyncStorage.getItem("userData");
-  
+      
       if (!userData) {
         return;
       }
-  
-      authenticateWithBiometrics();
-    } catch (error) {
-        alert(`Error: ${error.message}, inicie con contraseña`);
-        Vibration.vibrate();
-    }
-  };
-  
 
-  const authenticateWithBiometrics = async () => {
-    try {
-      const hasHardware = await LocalAuthentication.hasHardwareAsync();
-      const isEnrolled = await LocalAuthentication.isEnrolledAsync();
+      const { refresh_token } = JSON.parse(userData);
+      
+      const { data, error } = await supabase.auth.refreshSession({ refresh_token });
 
-      if (!hasHardware || !isEnrolled) {
-        return false;
-      }
+        if (error) {
+            await AsyncStorage.removeItem('userData'); 
+            return false;
+        }
+
+        await AsyncStorage.setItem('userData', JSON.stringify({
+            email: data.user.email,
+            access_token: data.session.access_token,
+            refresh_token: data.session.refresh_token
+        }));
+      
+        const hasHardware = await LocalAuthentication.hasHardwareAsync();
+        const isEnrolled = await LocalAuthentication.isEnrolledAsync();
+  
+        if (!hasHardware || !isEnrolled) {
+          return false;
+        } 
 
       const result = await LocalAuthentication.authenticateAsync({
         promptMessage: "Autenticación biométrica",
-        fallbackLabel: "Usar contraseña",
+        cancelLabel: "Usar contraseña",
         disableDeviceFallback: false,
       });
 
@@ -49,7 +63,7 @@ const useBiometricAuth = () => {
     }
   };
 
-  return { checkForSavedUser, isAuthenticated };
+  return { authenticateWithBiometrics, isAuthenticated };
 };
 
 export default useBiometricAuth;

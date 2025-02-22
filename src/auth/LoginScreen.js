@@ -93,11 +93,9 @@ export const LoginScreen = ({ navigation }) => {
           Vibration.vibrate();
           return;
         }
-        if (checked === true) {
-          await AsyncStorage.setItem(
-            "userData",
-            JSON.stringify({ email, password })
-          );
+        if (checked === false) {
+          await AsyncStorage.removeItem("userData");
+          
         }
         navigation.replace("Main");
       } catch (error) {
@@ -131,10 +129,10 @@ export const LoginScreen = ({ navigation }) => {
     ]).start();
   };
 
-  const { checkForSavedUser, isAuthenticated } = useBiometricAuth();
+  const { authenticateWithBiometrics, isAuthenticated } = useBiometricAuth();
 
   useEffect(() => {
-    checkForSavedUser();
+    authenticateWithBiometrics();
   }, []);
 
   useEffect(() => {
@@ -148,7 +146,7 @@ export const LoginScreen = ({ navigation }) => {
       <SafeAreaView style={{ flex: 1 }}>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={{ flex: 1 }}
+          style={{ flex: 1}}
         >
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <ScrollView
@@ -256,16 +254,14 @@ export const LoginScreen = ({ navigation }) => {
                 <View style={{ flexDirection: "row" }}>
                   <Checkbox
                     status={checked ? "checked" : "unchecked"}
-                    onPress={() => setChecked(!checked)}
+                    onPress={() => {setChecked(!checked); if (checked === false) {alert("Esto Habilitara el Inicio de Sesión con Biometria")}} }
                     color={checked ? "#4B92B8" : "gray"}
                   />
                   <Text style={styles.ToSText}>Recuérdame</Text>
                 </View>
-                
+
                 <TouchableOpacity onPress={() => alert("Recuperar contraseña")}>
-                  <Text
-                    style={styles.forgotPass}
-                  >
+                  <Text style={styles.forgotPass}>
                     ¿Olvidaste tu contraseña?
                   </Text>
                 </TouchableOpacity>
