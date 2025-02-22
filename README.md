@@ -5,6 +5,8 @@ Solo debes modificar stacknavigator para tu pantalla principal, ya sea el login 
 
 el logo se edita literlamente logo.png por el tuyo, la paleta de colores eres libre de cambiarla, recomiendo seguir usando el style dark/light para mejor progreso, pero eso es opcional.
 
+SI ALGUIEN LO PRUEBA EN IOS DIGAME SI FUNCIONA LA BIOMETRIA
+
 ## 📜 Licencia
 Este proyecto está bajo la licencia **Apache 2.0**.  
 Puedes usarlo libremente, pero debes **dar créditos a Pawis7**.
