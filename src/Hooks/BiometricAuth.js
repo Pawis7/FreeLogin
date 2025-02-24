@@ -12,9 +12,6 @@ const useBiometricAuth = () => {
     authenticateWithBiometrics();
   }, []);
 
-  
-  
-
  const authenticateWithBiometrics = async () => {
     try {
       const userData = await AsyncStorage.getItem("userData");

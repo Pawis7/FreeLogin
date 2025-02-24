@@ -14,14 +14,14 @@ import {
   TextInput,
   Vibration,
   StatusBar,
+  Pressable,
 } from "react-native";
 import React, { useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "../Styles/ThemeContext";
 import { Checkbox } from "react-native-paper";
 import { signUp } from "../dataBase/SignUp";
-
-
+import { useScaleAnimation } from "../Componentes/BotonesAnim";
 
 // Constantes para obtener el ancho y alto de la pantalla
 const { width, height } = Dimensions.get("window");
@@ -153,6 +153,11 @@ export const RegisterScreen = ({ navigation }) => {
     ]).start();
   };
 
+  const googleButtonAnim = useScaleAnimation();
+  const SignUpButtonAnim = useScaleAnimation();
+  const LinkTextAnim = useScaleAnimation();
+  const showAnim = useScaleAnimation();
+
   return (
     <View style={styles.MainContainer}>
       <StatusBar barStyle="default" />
@@ -250,18 +255,24 @@ export const RegisterScreen = ({ navigation }) => {
                     value={confirmPassword}
                     returnKeyType="done"
                   />
-                  <TouchableOpacity
-                    onPress={() => setShowPassword(!showPassword)}
+                  <Animated.View
+                    style={[{ transform: [{ scale: showAnim.scaleAnim }] }]}
                   >
-                    <Image
-                      style={styles.ShowNClose}
-                      source={
-                        showPassword
-                          ? require("../../assets/icons8-ocultar-100.png") // Ojo abierto
-                          : require("../../assets/icons8-eye-100.png") // Ojo cerrado
-                      }
-                    />
-                  </TouchableOpacity>
+                    <Pressable
+                      onPress={() => setShowPassword(!showPassword)}
+                      onPressIn={showAnim.handlePressIn}
+                      onPressOut={showAnim.handlePressOut}
+                    >
+                      <Image
+                        style={styles.ShowNClose}
+                        source={
+                          showPassword
+                            ? require("../../assets/icons8-ocultar-100.png") // Ojo abierto
+                            : require("../../assets/icons8-eye-100.png") // Ojo cerrado
+                        }
+                      />
+                    </Pressable>
+                  </Animated.View>
                 </View>
                 <View>
                   {!passwordError && (
@@ -306,36 +317,58 @@ export const RegisterScreen = ({ navigation }) => {
                 </View>
               </Animated.View>
 
-              <View style={styles.Boton}>
-                <TouchableOpacity onPress={handleRegister}>
+              <Animated.View
+                style={[
+                  { transform: [{ scale: SignUpButtonAnim.scaleAnim }] },
+                  styles.Boton,
+                ]}
+              >
+                <Pressable
+                  onPress={handleRegister}
+                  onPressIn={SignUpButtonAnim.handlePressIn}
+                  onPressOut={SignUpButtonAnim.handlePressOut}
+                  activeOpacity={1}
+                >
                   <Text style={styles.CrearCuentaFont}>Crear Cuenta</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.GContainer}>
-                <TouchableOpacity
+                </Pressable>
+              </Animated.View>
+              <Animated.View
+                style={[
+                  { transform: [{ scale: googleButtonAnim.scaleAnim }] },
+                  styles.GContainer,
+                ]}
+              >
+                <Pressable
                   style={styles.GButton}
                   onPress={() => alert("Registro con Google")}
+                  onPressIn={googleButtonAnim.handlePressIn}
+                  onPressOut={googleButtonAnim.handlePressOut}
                 >
                   <Image
                     style={styles.GLogo}
                     source={require("../../assets/googleLogo.png")}
                   />
                   <Text style={styles.Gtext}>Continuar con Google</Text>
-                </TouchableOpacity>
-              </View>
-              <View>
-                <TouchableOpacity
+                </Pressable>
+              </Animated.View>
+              <Animated.View
+                style={[{ transform: [{ scale: LinkTextAnim.scaleAnim }] }]}
+              >
+                <Pressable
+                  LinkTextAnim
                   style={{
                     flexDirection: "row",
                     justifyContent: "center",
                     marginTop: width * 0.06,
                   }}
                   onPress={() => navigation.replace("Login")}
+                  onPressIn={LinkTextAnim.handlePressIn}
+                  onPressOut={LinkTextAnim.handlePressOut}
                 >
                   <Text style={styles.linkText}>¿Ya tienes una cuenta? </Text>
                   <Text style={styles.linkTextBold}>Inicia Sesión</Text>
-                </TouchableOpacity>
-              </View>
+                </Pressable>
+              </Animated.View>
             </ScrollView>
           </TouchableWithoutFeedback>
         </KeyboardAvoidingView>

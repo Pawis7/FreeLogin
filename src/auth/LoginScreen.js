@@ -1,5 +1,4 @@
 import {
-  StyleSheet,
   Text,
   View,
   Animated,
@@ -13,15 +12,16 @@ import {
   Keyboard,
   TextInput,
   Vibration,
+  Pressable,
 } from "react-native";
 import React, { useRef, useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "../Styles/ThemeContext";
 import { logIn } from "../dataBase/Login";
-import * as LocalAuthentication from "expo-local-authentication";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import useBiometricAuth from "../Hooks/BiometricAuth";
 import { Checkbox } from "react-native-paper";
+import { useScaleAnimation }  from "../Componentes/BotonesAnim";
 
 const { width, height } = Dimensions.get("window");
 
@@ -95,7 +95,6 @@ export const LoginScreen = ({ navigation }) => {
         }
         if (checked === false) {
           await AsyncStorage.removeItem("userData");
-          
         }
         navigation.replace("Main");
       } catch (error) {
@@ -129,6 +128,12 @@ export const LoginScreen = ({ navigation }) => {
     ]).start();
   };
 
+  const googleButtonAnim = useScaleAnimation();
+  const loginButtonAnim = useScaleAnimation();
+  const ForgotAnim = useScaleAnimation();
+  const SignUpAnim = useScaleAnimation();
+  const showAnim = useScaleAnimation();
+
   const { authenticateWithBiometrics, isAuthenticated } = useBiometricAuth();
 
   useEffect(() => {
@@ -146,7 +151,7 @@ export const LoginScreen = ({ navigation }) => {
       <SafeAreaView style={{ flex: 1 }}>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={{ flex: 1}}
+          style={{ flex: 1 }}
         >
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <ScrollView
@@ -164,18 +169,23 @@ export const LoginScreen = ({ navigation }) => {
                   source={require("../../assets/logo.png")}
                 />
               </View>
-              <View style={styles.GContainer}>
-                <TouchableOpacity
+              <Animated.View
+                style={[{ transform: [{ scale: googleButtonAnim.scaleAnim  }] }, styles.GContainer]}
+              >
+              
+                <Pressable
                   style={styles.GButton}
                   onPress={() => alert("Registro con Google")}
+                  onPressIn={googleButtonAnim.handlePressIn}
+                  onPressOut={googleButtonAnim.handlePressOut}
                 >
                   <Image
                     style={styles.GLogo}
                     source={require("../../assets/googleLogo.png")}
                   />
                   <Text style={styles.Gtext}>Continuar con Google</Text>
-                </TouchableOpacity>
-              </View>
+                </Pressable>
+              </Animated.View>
               <DividerWithText text="O" />
 
               <Animated.View
@@ -222,8 +232,11 @@ export const LoginScreen = ({ navigation }) => {
                     value={password}
                     returnKeyType="next"
                   />
-                  <TouchableOpacity
+                  <Animated.View style={[{ transform: [{ scale: showAnim.scaleAnim  }] }]}>
+                  <Pressable
                     onPress={() => setShowPassword(!showPassword)}
+                    onPressIn={showAnim.handlePressIn}
+                    onPressOut={showAnim.handlePressOut}
                   >
                     <Image
                       style={styles.ShowNClose}
@@ -233,7 +246,8 @@ export const LoginScreen = ({ navigation }) => {
                           : require("../../assets/icons8-eye-100.png") // Ojo cerrado
                       }
                     />
-                  </TouchableOpacity>
+                  </Pressable>
+                  </Animated.View>
                 </View>
 
                 <View>
@@ -254,36 +268,53 @@ export const LoginScreen = ({ navigation }) => {
                 <View style={{ flexDirection: "row" }}>
                   <Checkbox
                     status={checked ? "checked" : "unchecked"}
-                    onPress={() => {setChecked(!checked); if (checked === false) {alert("Esto Habilitara el Inicio de Sesión con Biometria")}} }
+                    onPress={() => {
+                      setChecked(!checked);
+                      if (checked === false) {
+                        alert(
+                          "Esto Habilitara el Inicio de Sesión con Biometria"
+                        );
+                      }
+                    }}
                     color={checked ? "#4B92B8" : "gray"}
                   />
                   <Text style={styles.ToSText}>Recuérdame</Text>
                 </View>
-
-                <TouchableOpacity onPress={() => alert("Recuperar contraseña")}>
+                <Animated.View style={[{ transform: [{ scale: ForgotAnim.scaleAnim  }] }]}>
+                <Pressable onPress={() => alert("Recuperar contraseña")} onPressIn={ForgotAnim.handlePressIn} onPressOut={ForgotAnim.handlePressOut}>
                   <Text style={styles.forgotPass}>
                     ¿Olvidaste tu contraseña?
                   </Text>
-                </TouchableOpacity>
+                </Pressable>
+                </Animated.View>
               </View>
-              <View style={styles.Boton}>
-                <TouchableOpacity onPress={handleRegister}>
+              <Animated.View
+                style={[{ transform: [{ scale: loginButtonAnim.scaleAnim  }] }, styles.Boton]}
+              >
+                <Pressable
+                  onPress={handleRegister}
+                  onPressIn={loginButtonAnim.handlePressIn}
+                  onPressOut={loginButtonAnim.handlePressOut}
+                  activeOpacity={1}
+                >
                   <Text style={styles.CrearCuentaFont}>Iniciar Sesión</Text>
-                </TouchableOpacity>
-              </View>
-              <View>
-                <TouchableOpacity
+                </Pressable>
+              </Animated.View>
+              <Animated.View style={[{ transform: [{ scale: SignUpAnim.scaleAnim  }] }]}>
+                <Pressable
                   style={{
                     flexDirection: "row",
                     justifyContent: "center",
                     marginTop: width * 0.06,
                   }}
                   onPress={() => navigation.replace("Register")}
+                  onPressIn={SignUpAnim.handlePressIn}
+                  onPressOut={SignUpAnim.handlePressOut}
                 >
                   <Text style={styles.linkText}>¿No tienes cuenta? </Text>
                   <Text style={styles.linkTextBold}>Registrate</Text>
-                </TouchableOpacity>
-              </View>
+                </Pressable>
+              </Animated.View>
             </ScrollView>
           </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
