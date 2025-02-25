@@ -16,12 +16,12 @@ import {
 } from "react-native";
 import React, { useRef, useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useTheme } from "../Styles/ThemeContext";
+import styles from "../Styles/Styles";
 import { logIn } from "../dataBase/Login";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import useBiometricAuth from "../Hooks/BiometricAuth";
 import { Checkbox } from "react-native-paper";
-import { useScaleAnimation }  from "../Componentes/BotonesAnim";
+import { useScaleAnimation } from "../Componentes/BotonesAnim";
 
 const { width, height } = Dimensions.get("window");
 
@@ -35,18 +35,6 @@ const validatePassword = (password) => {
 };
 
 export const LoginScreen = ({ navigation }) => {
-  const { styles } = useTheme();
-
-  const DividerWithText = ({ text = "o" }) => {
-    return (
-      <View style={styles.dividerContainer}>
-        <View style={styles.dividerLine} />
-        <Text style={styles.dividerText}>{text}</Text>
-        <View style={styles.dividerLine} />
-      </View>
-    );
-  };
-
   const [checked, setChecked] = useState(false);
 
   const shakeAnimation = useRef(new Animated.Value(0)).current;
@@ -169,7 +157,9 @@ export const LoginScreen = ({ navigation }) => {
                   source={require("../../assets/logo.png")}
                 />
               </View>
-              <Animated.View
+
+              {/*boton de google comentado porque es muy complicado dejar una simulacion para que se implemente, emepzar el inicio con google desde 0 o eliminar */}
+              {/* <Animated.View
                 style={[{ transform: [{ scale: googleButtonAnim.scaleAnim  }] }, styles.GContainer]}
               >
               
@@ -185,8 +175,7 @@ export const LoginScreen = ({ navigation }) => {
                   />
                   <Text style={styles.Gtext}>Continuar con Google</Text>
                 </Pressable>
-              </Animated.View>
-              <DividerWithText text="O" />
+              </Animated.View> */}
 
               <Animated.View
                 style={[
@@ -203,9 +192,7 @@ export const LoginScreen = ({ navigation }) => {
                     style={styles.TextOnInput}
                     placeholder="Correo Electrónico"
                     keyboardType="email-address"
-                    placeholderTextColor={
-                      useTheme === "dark" ? "gray" : "#8b8b8b"
-                    }
+                    placeholderTextColor="gray"
                     onChangeText={setEmail}
                     value={email}
                     returnKeyType="next"
@@ -224,29 +211,29 @@ export const LoginScreen = ({ navigation }) => {
                   <TextInput
                     style={styles.TextOnInput}
                     placeholder="Contraseña"
-                    placeholderTextColor={
-                      useTheme === "dark" ? "gray" : "#8b8b8b"
-                    }
+                    placeholderTextColor="gray"
                     secureTextEntry={!showPassword}
                     onChangeText={setPassword}
                     value={password}
                     returnKeyType="next"
                   />
-                  <Animated.View style={[{ transform: [{ scale: showAnim.scaleAnim  }] }]}>
-                  <Pressable
-                    onPress={() => setShowPassword(!showPassword)}
-                    onPressIn={showAnim.handlePressIn}
-                    onPressOut={showAnim.handlePressOut}
+                  <Animated.View
+                    style={[{ transform: [{ scale: showAnim.scaleAnim }] }]}
                   >
-                    <Image
-                      style={styles.ShowNClose}
-                      source={
-                        showPassword
-                          ? require("../../assets/icons8-ocultar-100.png") // Ojo abierto
-                          : require("../../assets/icons8-eye-100.png") // Ojo cerrado
-                      }
-                    />
-                  </Pressable>
+                    <Pressable
+                      onPress={() => setShowPassword(!showPassword)}
+                      onPressIn={showAnim.handlePressIn}
+                      onPressOut={showAnim.handlePressOut}
+                    >
+                      <Image
+                        style={styles.ShowNClose}
+                        source={
+                          showPassword
+                            ? require("../../assets/icons8-ocultar-100.png") // Ojo abierto
+                            : require("../../assets/icons8-eye-100.png") // Ojo cerrado
+                        }
+                      />
+                    </Pressable>
                   </Animated.View>
                 </View>
 
@@ -280,16 +267,25 @@ export const LoginScreen = ({ navigation }) => {
                   />
                   <Text style={styles.ToSText}>Recuérdame</Text>
                 </View>
-                <Animated.View style={[{ transform: [{ scale: ForgotAnim.scaleAnim  }] }]}>
-                <Pressable onPress={() => alert("Recuperar contraseña")} onPressIn={ForgotAnim.handlePressIn} onPressOut={ForgotAnim.handlePressOut}>
-                  <Text style={styles.forgotPass}>
-                    ¿Olvidaste tu contraseña?
-                  </Text>
-                </Pressable>
+                <Animated.View
+                  style={[{ transform: [{ scale: ForgotAnim.scaleAnim }] }]}
+                >
+                  <Pressable
+                    onPress={() => alert("Recuperar contraseña")}
+                    onPressIn={ForgotAnim.handlePressIn}
+                    onPressOut={ForgotAnim.handlePressOut}
+                  >
+                    <Text style={styles.forgotPass}>
+                      ¿Olvidaste tu contraseña?
+                    </Text>
+                  </Pressable>
                 </Animated.View>
               </View>
               <Animated.View
-                style={[{ transform: [{ scale: loginButtonAnim.scaleAnim  }] }, styles.Boton]}
+                style={[
+                  { transform: [{ scale: loginButtonAnim.scaleAnim }] },
+                  styles.Boton,
+                ]}
               >
                 <Pressable
                   onPress={handleRegister}
@@ -300,7 +296,9 @@ export const LoginScreen = ({ navigation }) => {
                   <Text style={styles.CrearCuentaFont}>Iniciar Sesión</Text>
                 </Pressable>
               </Animated.View>
-              <Animated.View style={[{ transform: [{ scale: SignUpAnim.scaleAnim  }] }]}>
+              <Animated.View
+                style={[{ transform: [{ scale: SignUpAnim.scaleAnim }] }]}
+              >
                 <Pressable
                   style={{
                     flexDirection: "row",

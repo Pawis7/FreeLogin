@@ -18,7 +18,7 @@ import {
 } from "react-native";
 import React, { useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useTheme } from "../Styles/ThemeContext";
+import styles from "../Styles/Styles";
 import { Checkbox } from "react-native-paper";
 import { signUp } from "../dataBase/SignUp";
 import { useScaleAnimation } from "../Componentes/BotonesAnim";
@@ -44,8 +44,6 @@ const validateConfirmPassword = (password, confirmPassword) => {
 };
 
 export const RegisterScreen = ({ navigation }) => {
-  const { styles } = useTheme();
-
   const [checked, setChecked] = useState(false);
   const [shakeAnimation] = useState(new Animated.Value(0));
   const isDisabled = true; // Simulación de deshabilitado
@@ -84,7 +82,7 @@ export const RegisterScreen = ({ navigation }) => {
 
     if (!validatePassword(password)) {
       setPasswordError(
-        "Debe tener MINIMO 8 caracteres, 1 mayúscula, 1 número y 1 símbolo"
+        "MINIMO 8 caracteres, 1 mayúscula, 1 número y 1 símbolo"
       );
       valid = false;
     } else {
@@ -111,7 +109,6 @@ export const RegisterScreen = ({ navigation }) => {
     }
     if (valid) {
       try {
-        // Enviar los datos a Supabase
         const result = await signUp(email, password);
 
         if (!result.success) {
@@ -119,8 +116,6 @@ export const RegisterScreen = ({ navigation }) => {
           Vibration.vibrate();
           return;
         }
-
-        alert("Registro exitoso. Revisa tu correo para confirmar la cuenta.");
         navigation.replace("Login");
       } catch (error) {
         alert(`Error: ${error.message}`);
@@ -160,7 +155,6 @@ export const RegisterScreen = ({ navigation }) => {
 
   return (
     <View style={styles.MainContainer}>
-      <StatusBar barStyle="default" />
       <SafeAreaView style={{ flex: 1 }}>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -182,17 +176,13 @@ export const RegisterScreen = ({ navigation }) => {
                   source={require("../../assets/logo.png")}
                 />
               </View>
+
               <Animated.View
                 style={[
                   styles.container,
                   { transform: [{ translateX: shakeAnimation }] },
                 ]}
               >
-                <View>
-                  {nameError ? (
-                    <Text style={styles.ErrorText}>{nameError}</Text>
-                  ) : null}
-                </View>
                 <View style={styles.InputContainer}>
                   <Image
                     style={styles.iconos}
@@ -201,9 +191,7 @@ export const RegisterScreen = ({ navigation }) => {
                   <TextInput
                     style={styles.TextOnInput}
                     placeholder="Correo Electrónico"
-                    placeholderTextColor={
-                      useTheme === "dark" ? "gray" : "#8b8b8b"
-                    }
+                    placeholderTextColor="gray"
                     keyboardType="email-address"
                     onChangeText={setEmail}
                     value={email}
@@ -224,9 +212,7 @@ export const RegisterScreen = ({ navigation }) => {
                   <TextInput
                     style={styles.TextOnInput}
                     placeholder="Contraseña"
-                    placeholderTextColor={
-                      useTheme === "dark" ? "gray" : "#8b8b8b"
-                    }
+                    placeholderTextColor="gray"
                     secureTextEntry={!showPassword}
                     onChangeText={setPassword}
                     value={password}
@@ -247,9 +233,7 @@ export const RegisterScreen = ({ navigation }) => {
                   <TextInput
                     style={styles.TextOnInput}
                     placeholder="Confirma Contraseña"
-                    placeholderTextColor={
-                      useTheme === "dark" ? "gray" : "#8b8b8b"
-                    }
+                    placeholderTextColor="gray"
                     secureTextEntry={!showPassword}
                     onChangeText={setConfirmPassword}
                     value={confirmPassword}
@@ -332,12 +316,12 @@ export const RegisterScreen = ({ navigation }) => {
                   <Text style={styles.CrearCuentaFont}>Crear Cuenta</Text>
                 </Pressable>
               </Animated.View>
-              <Animated.View
-                style={[
-                  { transform: [{ scale: googleButtonAnim.scaleAnim }] },
-                  styles.GContainer,
-                ]}
+              {/* boton de google comentado porque es muy complicado dejar una simulacion para que se implemente, emepezar el inicio con google desde 0 
+            (funcion, el boton solo mandaria a llmar esa funcion) o eliminar */}
+              {/* <Animated.View
+                style={[{ transform: [{ scale: googleButtonAnim.scaleAnim  }] }, styles.GContainer]}
               >
+              
                 <Pressable
                   style={styles.GButton}
                   onPress={() => alert("Registro con Google")}
@@ -350,7 +334,8 @@ export const RegisterScreen = ({ navigation }) => {
                   />
                   <Text style={styles.Gtext}>Continuar con Google</Text>
                 </Pressable>
-              </Animated.View>
+              </Animated.View> */}
+
               <Animated.View
                 style={[{ transform: [{ scale: LinkTextAnim.scaleAnim }] }]}
               >

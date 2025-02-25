@@ -33,6 +33,13 @@ const styles = StyleSheet.create({
     marginTop: width * 0.02,
     marginBottom: width * 0.04,
   },
+  HomeLogo: {
+    width: 330,
+    height: 330,
+    alignSelf: "center",
+    marginTop: width * 0.1,
+    marginBottom: width * 0.04,
+  },
   Boton: {
     backgroundColor: "#023e8a",
     width: width * 0.85,
