@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     height: 330,
     alignSelf: "center",
     marginTop: width * 0.1,
-    marginBottom: width * 0.04,
+    marginBottom: width * 0.02,
   },
   Boton: {
     backgroundColor: "#023e8a",
@@ -194,6 +194,14 @@ const styles = StyleSheet.create({
     paddingTop: 9,
     font: "montserrat",
   },
+  HomeContentText:{
+    fontSize: 16,
+    textAlign: "justify",
+    color: "#023e8a",
+    fontFamily: "montserrat",
+    paddingHorizontal: 20,
+    marginBottom: width * 0.1,
+  }
 });
 
 export default styles;
